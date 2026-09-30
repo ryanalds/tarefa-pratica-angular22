@@ -116,8 +116,15 @@ export class LivroService {
     return this.livros().find((livro) => livro.id === id);
   }
 
-  adicionar(livro: Livro): void {
-    this.livrosState.update((livros) => [...livros, livro]);
+  adicionar(livro: Omit<Livro, 'id'>): void {
+    this.livrosState.update((livros) => {
+      const proximoId = livros.reduce(
+        (maiorId, livroAtual) => Math.max(maiorId, livroAtual.id),
+        0,
+      ) + 1;
+
+      return [...livros, { ...livro, id: proximoId }];
+    });
   }
 
   atualizar(livroAtualizado: Livro): boolean {
