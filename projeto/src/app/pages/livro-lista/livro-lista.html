@@ -1,167 +1,193 @@
-<main class="min-h-screen bg-white px-4 py-8 text-black transition-colors dark:bg-neutral-950 dark:text-white sm:px-6 sm:py-12 lg:px-8">
-  <section class="mx-auto max-w-6xl">
-    <header class="mb-8 border-b-4 border-yellow-400 pb-6 sm:mb-10 sm:flex sm:items-end sm:justify-between sm:gap-8">
-      <div>
-        <p class="mb-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-black/75 dark:text-white/75">
-          <span class="h-2.5 w-2.5 rounded-full bg-yellow-400"></span>
-          Biblioteca pessoal
-        </p>
-        <h1 class="text-3xl font-black tracking-tight sm:text-4xl">Catálogo de livros</h1>
-        <p class="mt-3 max-w-xl text-sm leading-6 text-black/75 dark:text-white/75 sm:text-base">
-          Organize seu acervo, acompanhe os preços e atualize a disponibilidade dos títulos.
-        </p>
-      </div>
+<main class="catalogo-pagina">
+    <section class="catalogo-conteudo">
+        <header class="catalogo-cabecalho">
+            <div>
+                <p class="catalogo-sobretitulo">
+                    <span class="catalogo-indicador"></span>
+                    Biblioteca pessoal
+                </p>
+                <h1 class="catalogo-titulo">Catálogo de livros</h1>
+                <p class="catalogo-descricao">
+                    Organize seu acervo, acompanhe os preços e atualize a
+                    disponibilidade dos títulos.
+                </p>
+            </div>
 
-      <div class="mt-6 flex flex-col items-stretch gap-3 sm:mt-0 sm:min-w-56 sm:items-end">
-        <p class="text-sm font-medium text-black/75 dark:text-white/75">
-          <span class="mr-1 text-2xl font-black tabular-nums text-black dark:text-white">{{ livros().length }}</span>
-          {{ livros().length === 1 ? 'livro no acervo' : 'livros no acervo' }}
-        </p>
-        <button
-          type="button"
-          class="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-yellow-400 px-5 py-3 text-sm font-bold text-black shadow-sm transition hover:bg-yellow-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-          (click)="abrirNovo()">
-          <span aria-hidden="true" class="text-lg leading-none">+</span>
-          Adicionar livro
-        </button>
-      </div>
-    </header>
-
-    <section aria-labelledby="lista-titulo" class="overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_12px_40px_-24px_rgba(0,0,0,0.35)] dark:border-white/10 dark:bg-neutral-900 dark:shadow-black/30">
-      <div class="flex flex-col gap-1 border-b border-black/10 px-5 py-4 dark:border-white/10 sm:flex-row sm:items-baseline sm:justify-between sm:px-6">
-        <h2 id="lista-titulo" class="text-lg font-bold">Todos os títulos</h2>
-        <p class="text-xs font-medium uppercase tracking-wider text-black/70 dark:text-white/70">Acervo atualizado</p>
-      </div>
-
-      <div class="overflow-x-auto">
-        <p-table [value]="livros()" [tableStyle]="{ 'min-width': '44rem', width: '100%' }">
-          <ng-template #header>
-            <tr class="bg-black text-left text-xs font-bold uppercase tracking-wider text-white/80">
-              <th scope="col" class="px-5 py-4 sm:px-6">Título</th>
-              <th scope="col" class="px-5 py-4">Preço</th>
-              <th scope="col" class="px-5 py-4">Publicado em</th>
-              <th scope="col" class="px-5 py-4">Disponibilidade</th>
-              <th scope="col" class="px-5 py-4 text-right">Ações</th>
-            </tr>
-          </ng-template>
-
-          <ng-template #body let-livro>
-            <tr class="border-b border-black/5 text-sm transition-colors last:border-0 hover:bg-yellow-50/70 dark:border-white/10 dark:hover:bg-white/5">
-              <td class="max-w-sm px-5 py-4 font-semibold text-black dark:text-white sm:px-6">{{ livro.titulo }}</td>
-              <td class="whitespace-nowrap px-5 py-4 font-medium tabular-nums">{{ livro.preco | currency: 'BRL' }}</td>
-              <td class="whitespace-nowrap px-5 py-4 text-black/75 tabular-nums dark:text-white/75">{{ livro.publicadoEm | date: 'dd/MM/yyyy' }}</td>
-              <td class="px-5 py-4">
-                <span
-                  class="inline-flex whitespace-nowrap rounded-full px-3 py-1 text-xs font-bold"
-                  [class.bg-yellow-300]="livro.disponivel"
-                  [class.text-black]="livro.disponivel"
-                  [class.bg-black]="!livro.disponivel"
-                  [class.text-white]="!livro.disponivel">
-                  {{ livro.disponivel ? 'Disponível' : 'Indisponível' }}
-                </span>
-              </td>
-              <td class="px-5 py-4">
-                <div class="flex flex-wrap justify-end gap-3">
-                  <button
+            <div class="catalogo-resumo-acervo">
+                <p class="catalogo-contador-acervo">
+                    <span class="catalogo-numero-acervo">{{ livros().length
+                        }}</span>
+                    {{ livros().length === 1 ? 'livro no acervo' :
+                    'livros no acervo' }}
+                </p>
+                <button
                     type="button"
-                    class="min-h-10 rounded-lg border border-black px-4 py-2 text-xs font-bold text-black transition hover:bg-black hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-white/60 dark:text-white dark:hover:bg-white dark:hover:text-black dark:focus-visible:outline-white"
-                    [attr.aria-label]="'Editar ' + livro.titulo"
-                    (click)="abrirEdicao(livro)">
-                    Editar
-                  </button>
-                  <button
-                    type="button"
-                    class="min-h-10 rounded-lg bg-black px-4 py-2 text-xs font-bold text-white transition hover:bg-black/75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
-                    [attr.aria-label]="'Remover ' + livro.titulo"
-                    (click)="remover(livro)">
-                    Remover
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </ng-template>
+                    class="catalogo-botao-adicionar"
+                    (click)="abrirNovo()">
+                    <span aria-hidden="true"
+                        class="catalogo-icone-adicionar">+</span>
+                    Adicionar livro
+                </button>
+            </div>
+        </header>
 
-          <ng-template #emptymessage>
-            <tr>
-              <td colspan="5" class="px-6 py-16 text-center">
-                <span class="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-yellow-300 text-2xl font-black" aria-hidden="true">+</span>
-                <p class="text-lg font-bold">Seu acervo ainda está vazio</p>
-                <p class="mt-2 text-sm text-black/75 dark:text-white/75">Use “Adicionar livro” para cadastrar o primeiro título.</p>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
+        <section aria-labelledby="lista-titulo" class="catalogo-painel-lista">
+            <div class="catalogo-cabecalho-lista">
+                <h2 id="lista-titulo" class="catalogo-subtitulo-lista">Todos os
+                    títulos</h2>
+                <p class="catalogo-rotulo-status-acervo">Acervo atualizado</p>
+            </div>
+
+            <div class="catalogo-area-tabela">
+                <p-table [value]="livros()"
+                    [tableStyle]="{ 'min-width': '44rem', width: '100%' }">
+                    <ng-template #header>
+                        <tr class="catalogo-cabecalho-colunas">
+                            <th scope="col"
+                                class="catalogo-celula-primeira-coluna">Título</th>
+                            <th scope="col"
+                                class="catalogo-celula-padrao">Preço</th>
+                            <th scope="col"
+                                class="catalogo-celula-padrao">Publicado em</th>
+                            <th scope="col"
+                                class="catalogo-celula-padrao">Disponibilidade</th>
+                            <th scope="col"
+                                class="catalogo-celula-acoes">Ações</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template #body let-livro>
+                        <tr class="catalogo-linha-livro">
+                            <td class="catalogo-celula-titulo-livro">{{
+                                livro.titulo }}</td>
+                            <td class="catalogo-celula-preco">{{ livro.preco |
+                                currency: 'BRL' }}</td>
+                            <td class="catalogo-celula-data">{{
+                                livro.publicadoEm | date: 'dd/MM/yyyy' }}</td>
+                            <td class="catalogo-celula-padrao">
+                                <span
+                                    class="catalogo-selo-disponibilidade"
+                                    [class.bg-yellow-300]="livro.disponivel"
+                                    [class.text-black]="livro.disponivel"
+                                    [class.bg-black]="!livro.disponivel"
+                                    [class.text-white]="!livro.disponivel">
+                                    {{ livro.disponivel ? 'Disponível' :
+                                    'Indisponível' }}
+                                </span>
+                            </td>
+                            <td class="catalogo-celula-padrao">
+                                <div class="catalogo-grupo-acoes-livro">
+                                    <button
+                                        type="button"
+                                        class="catalogo-botao-editar"
+                                        [attr.aria-label]="'Editar ' + livro.titulo"
+                                        (click)="abrirEdicao(livro)">
+                                        Editar
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="catalogo-botao-remover"
+                                        [attr.aria-label]="'Remover ' + livro.titulo"
+                                        (click)="remover(livro)">
+                                        Remover
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template #emptymessage>
+                        <tr>
+                            <td colspan="5" class="catalogo-mensagem-vazia">
+                                <span class="catalogo-icone-vazio"
+                                    aria-hidden="true">+</span>
+                                <p class="catalogo-subtitulo-lista">Seu acervo
+                                    ainda está vazio</p>
+                                <p class="catalogo-ajuda-vazio">Use “Adicionar
+                                    livro” para cadastrar o primeiro título.</p>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </section>
     </section>
-  </section>
 </main>
 
 <p-dialog
-  [header]="livroEmEdicao ? 'Editar livro' : 'Adicionar livro'"
-  [(visible)]="dialogVisivel"
-  [modal]="true"
-  [dismissableMask]="true"
-  [style]="{ width: 'min(34rem, calc(100vw - 2rem))' }">
-  <form class="flex flex-col gap-6 bg-white pt-2 text-black dark:bg-neutral-900 dark:text-white" (ngSubmit)="salvar()" #livroForm="ngForm">
-    <p class="-mt-2 text-sm leading-6 text-black/75 dark:text-white/75">Preencha os dados abaixo para manter as informações do acervo organizadas.</p>
+    [header]="livroEmEdicao ? 'Editar livro' : 'Adicionar livro'"
+    [(visible)]="dialogVisivel"
+    [modal]="true"
+    [dismissableMask]="true"
+    [style]="{ width: 'min(34rem, calc(100vw - 2rem))' }">
+    <form class="catalogo-formulario-livro" (ngSubmit)="salvar()"
+        #livroForm="ngForm">
+        <p class="catalogo-instrucao-formulario">Preencha os dados abaixo para
+            manter as informações do acervo organizadas.</p>
 
-    <div class="flex flex-col gap-2">
-      <label for="titulo" class="text-sm font-bold text-black dark:text-white">Título <span class="text-yellow-700 dark:text-yellow-300">*</span></label>
-      <input
-        id="titulo"
-        name="titulo"
-        type="text"
-        required
-        maxlength="160"
-        [(ngModel)]="titulo"
-        placeholder="Ex.: O Hobbit"
-        class="w-full rounded-lg border border-black/25 bg-white px-4 py-3 text-sm text-black outline-none transition placeholder:text-black/60 hover:border-black/60 focus:border-yellow-600 focus:ring-4 focus:ring-yellow-400/25 dark:border-white/25 dark:bg-neutral-950 dark:text-white dark:placeholder:text-white/60 dark:hover:border-white/50 dark:focus:border-yellow-300" />
-    </div>
+        <div class="catalogo-campo-grupo">
+            <label for="titulo" class="catalogo-rotulo-campo">Título <span
+                    class="catalogo-marcador-obrigatorio">*</span></label>
+            <input
+                id="titulo"
+                name="titulo"
+                type="text"
+                required
+                maxlength="160"
+                [(ngModel)]="titulo"
+                placeholder="Ex.: O Hobbit"
+                class="catalogo-campo-input" />
+        </div>
 
-    <div class="grid gap-5 sm:grid-cols-2">
-      <div class="flex flex-col gap-2">
-        <label for="preco" class="text-sm font-bold text-black dark:text-white">Preço (R$) <span class="text-yellow-700 dark:text-yellow-300">*</span></label>
-        <input
-          id="preco"
-          name="preco"
-          type="number"
-          required
-          min="0"
-          step="0.01"
-          [(ngModel)]="preco"
-          class="w-full rounded-lg border border-black/25 bg-white px-4 py-3 text-sm text-black outline-none transition hover:border-black/60 focus:border-yellow-600 focus:ring-4 focus:ring-yellow-400/25 dark:border-white/25 dark:bg-neutral-950 dark:text-white dark:hover:border-white/50 dark:focus:border-yellow-300" />
-      </div>
+        <div class="catalogo-campos-preco-data">
+            <div class="catalogo-campo-grupo">
+                <label for="preco" class="catalogo-rotulo-campo">Preço (R$)
+                    <span class="catalogo-marcador-obrigatorio">*</span></label>
+                <input
+                    id="preco"
+                    name="preco"
+                    type="number"
+                    required
+                    min="0"
+                    step="0.01"
+                    [(ngModel)]="preco"
+                    class="catalogo-campo-data" />
+            </div>
 
-      <div class="flex flex-col gap-2">
-        <label for="publicadoEm" class="text-sm font-bold text-black dark:text-white">Data de publicação <span class="text-yellow-700 dark:text-yellow-300">*</span></label>
-        <input
-          id="publicadoEm"
-          name="publicadoEm"
-          type="date"
-          required
-          [(ngModel)]="publicadoEm"
-          class="w-full rounded-lg border border-black/25 bg-white px-4 py-3 text-sm text-black outline-none transition hover:border-black/60 focus:border-yellow-600 focus:ring-4 focus:ring-yellow-400/25 dark:border-white/25 dark:bg-neutral-950 dark:text-white dark:hover:border-white/50 dark:focus:border-yellow-300" />
-      </div>
-    </div>
+            <div class="catalogo-campo-grupo">
+                <label for="publicadoEm" class="catalogo-rotulo-campo">Data de
+                    publicação <span
+                        class="catalogo-marcador-obrigatorio">*</span></label>
+                <input
+                    id="publicadoEm"
+                    name="publicadoEm"
+                    type="date"
+                    required
+                    [(ngModel)]="publicadoEm"
+                    class="catalogo-campo-data" />
+            </div>
+        </div>
 
-    <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-black/10 bg-yellow-50 px-4 py-3 text-sm font-semibold text-black transition hover:bg-yellow-100 dark:border-white/15 dark:bg-yellow-400/10 dark:text-white dark:hover:bg-yellow-400/15">
-      <input name="disponivel" type="checkbox" [(ngModel)]="disponivel" class="size-4 accent-yellow-500 focus:ring-yellow-500" />
-      Disponível para empréstimo
-    </label>
+        <label class="catalogo-opcao-disponibilidade">
+            <input name="disponivel" type="checkbox" [(ngModel)]="disponivel"
+                class="catalogo-checkbox-disponibilidade" />
+            Disponível para empréstimo
+        </label>
 
-      <div class="flex flex-col-reverse gap-3 border-t border-black/10 pt-5 dark:border-white/15 sm:flex-row sm:justify-end">
-      <button
-        type="button"
-        class="min-h-11 rounded-lg border border-black/20 px-5 py-3 text-sm font-bold text-black transition hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-white/30 dark:text-white dark:hover:bg-white/10 dark:focus-visible:outline-white"
-        (click)="dialogVisivel = false">
-        Cancelar
-      </button>
-      <button
-        type="submit"
-        class="min-h-11 rounded-lg bg-yellow-400 px-5 py-3 text-sm font-bold text-black transition hover:bg-yellow-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-50"
-        [disabled]="livroForm.invalid">
-        {{ livroEmEdicao ? 'Salvar alterações' : 'Adicionar ao acervo' }}
-      </button>
-    </div>
-  </form>
+        <div class="catalogo-acoes-formulario">
+            <button
+                type="button"
+                class="catalogo-botao-cancelar"
+                (click)="dialogVisivel = false">
+                Cancelar
+            </button>
+            <button
+                type="submit"
+                class="catalogo-botao-salvar"
+                [disabled]="livroForm.invalid">
+                {{ livroEmEdicao ? 'Salvar alterações' : 'Adicionar ao acervo'
+                }}
+            </button>
+        </div>
+    </form>
 </p-dialog>
